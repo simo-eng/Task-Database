@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 using WebApplication3.Data;
 using WebApplication3.Models;
+using WebApplication3.ViewModel;
 using Type = WebApplication3.Models.Type;
 
 namespace WebApplication3.Controllers
@@ -31,17 +32,34 @@ namespace WebApplication3.Controllers
         }
         public IActionResult AddProduct()
         {
-            return View();
+            var co=_db.companies.ToList();
+            var productView = new ProductViewModel()
+            {
+                companies = co
+            };
+            return View(productView);
         }
         
       
         [HttpPost]
         public IActionResult AddProduct(Product product)
         {
+          
+
+            if (!ModelState.IsValid)
+            {
+                ProductViewModel ss=new ProductViewModel();
+                ss.product = product;
+
+                ss.companies = _db.companies.ToList();
+
+
+                return View(ss);
+            }
           _db.products.Add(product);
             _db.SaveChanges();
           
-            return View();
+            return RedirectToAction("GetAllData");
         }
         #region 
         public IActionResult GetAllData()
@@ -89,16 +107,31 @@ namespace WebApplication3.Controllers
         #endregion
         public IActionResult AddBlog()
         {
-            return View();
+            var ty = _db.types.ToList();
+            var BlogView = new BlogViewModel()
+            {
+                types = ty
+            };
+            return View(BlogView);
         }
        [HttpPost]
         public IActionResult AddBlog(Blog blog)
-        { 
-        
-          _db.blogs.Add(blog);
+        {
+            if (!ModelState.IsValid)
+            {
+                BlogViewModel b = new BlogViewModel();
+                b.blog = blog;
+
+                b.types = _db.types.ToList();
+
+
+                return View(b);
+            }
+
+            _db.blogs.Add(blog);
             _db.SaveChanges();
             
-            return View();
+            return RedirectToAction("ViewBlog");
         }
         #region 
         public IActionResult ViewBlog()

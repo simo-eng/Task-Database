@@ -1,4 +1,4 @@
-﻿@model Blog
+﻿@model BlogViewModel
 @{
     Layout = "_DashBoard";
 }
@@ -12,36 +12,41 @@
         <div>
             <form methode="Post" asp-action="AddBlog" class="row">
                 <div class="mb-3">
-                    <label asp-for="Title" for="" class="form-label">Blog Title</label>
+                    <label asp-for="blog.Title" for="" class="form-label">Blog Title</label>
                     <input type="text"
                            
                           
-                           asp-for="Title"
+                           asp-for="blog.Title"
                            class="form-control"
                            placeholder="" />
+                    <span asp-validation-for="blog.Title" class="text-danger"></span>
 
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Description" for="" class="form-label">Blog Description</label>
+                    <label asp-for="blog.Description" for="" class="form-label">Blog Description</label>
                     <textarea type="text"
-                              
-                              asp-for="Description"
+                              asp-for="blog.Description"
                               class="form-control"
                               placeholder=""></textarea>
+                    <span asp-validation-for="blog.Description" class="text-danger"></span>
                 </div>
 
 
 
 
                 <div class="mb-3 col-lg-6">
-                    <label asp-for="TypeId" for="" class="form-label">Type</label>
+                    <label asp-for="blog.TypeId" for="" class="form-label">Type</label>
                     <select class="form-select "
-                            asp-for="TypeId"
-                            >
+                            asp-for="blog.TypeId">
 
                         <option selected>Select one</option>
-                        <option value="1">Drama</option>
-                        <option value="2">Comedy</option>
+                        @{
+                            foreach(var t in Model.types)
+                            {
+                                <option value=@t.Id>@t.Name</option>
+                            }
+                        }
+
                     </select>
                 </div>
              
